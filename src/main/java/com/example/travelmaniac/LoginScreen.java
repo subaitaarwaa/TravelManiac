@@ -12,9 +12,18 @@ import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import javafx.stage.Stage;
 
+/**
+ * Represents the login screen for the TravelManiac application.
+ * 
+ */
 public class LoginScreen {
-    private Scene scene;
+    private Scene scene; // Represents the screen layout
 
+    /**
+     * Constructor for the LoginScreen.
+     * @param stage The primary stage.
+     * @param app The main application instance.
+     */
     public LoginScreen(Stage stage, App app) {
         // Header with Welcome Text
         Label welcomeText = new Label("Welcome back to TravelManiac!");
@@ -41,15 +50,22 @@ public class LoginScreen {
             "-fx-padding: 8px 20px; -fx-border-radius: 12px;"
         );
         loginButton.setOnAction(e -> {
+            // Retrieve the entered username and password
             String username = usernameField.getText();
             String password = passwordField.getText();
 
-            // Validate user credentials
-            boolean validUser = App.users.stream()
-                .anyMatch(user -> user.login(username, password));
+            boolean validUser = false; // Flag to track if login is successful
+
+            // Use a loop to check if the entered credentials match any user
+            for (User user : App.users) {
+                if (user.login(username, password)) {
+                    validUser = true; // Match found
+                    break; // Exit loop early
+                }
+            }
 
             if (validUser) {
-                app.showDashboard(); // Navigate to dashboard
+                app.showDashboard(); // Navigate to the dashboard screen
             } else {
                 System.out.println("Invalid username or password");
             }
@@ -69,9 +85,13 @@ public class LoginScreen {
         layout.setAlignment(Pos.CENTER);
         layout.setStyle("-fx-padding: 16px; -fx-spacing: 16px; -fx-background-color: #ffffff;");
 
-        scene = new Scene(layout, 400, 500);
+        scene = new Scene(layout, 400, 500); // Create the scene with a specified width and height
     }
 
+    /**
+     * 
+     * @return The scene for this screen.
+     */
     public Scene getScene() {
         return scene;
     }
